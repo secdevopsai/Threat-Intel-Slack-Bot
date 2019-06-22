@@ -31,3 +31,4 @@ node_modules/
 __pycache__
 
 # secrets
+secrets.yml
