@@ -10,6 +10,7 @@ provider:
     SLACK_CHANNEL: "${self:custom.secrets.SLACK_CHANNEL}"
     PASSIVETOTAL_USERNAME: "${self:custom.secrets.PASSIVETOTAL_USERNAME}"
     PASSIVETOTAL_APIKEY: "${self:custom.secrets.PASSIVETOTAL_APIKEY}"
+    VT_API_KEY: "${self:custom.secrets.VT_API_KEY}"
 
 functions:
   query:
@@ -17,6 +18,15 @@ functions:
     events:
       - http:
           path: query
+          method: any
+          request:
+            passThrough: WHEN_NO_MATCH
+  vt:
+    handler: vt.handler
+    events:
+      - http:
+          integration: LAMBDA
+          path: vt
           method: any
           request:
             passThrough: WHEN_NO_MATCH
