@@ -6,39 +6,46 @@ provider:
   region: us-west-1
   stage: dev
   environment:
-    SLACK_API_TOKEN: "${self:custom.secrets.SLACK_API_TOKEN}"
-    SLACK_CHANNEL: "${self:custom.secrets.SLACK_CHANNEL}"
-    PASSIVETOTAL_USERNAME: "${self:custom.secrets.PASSIVETOTAL_USERNAME}"
-    PASSIVETOTAL_APIKEY: "${self:custom.secrets.PASSIVETOTAL_APIKEY}"
-    VT_API_KEY: "${self:custom.secrets.VT_API_KEY}"
+    SLACK_API_TOKEN: "${env:SLACK_API_TOKEN}"
+    SLACK_CHANNEL: "${env:SLACK_CHANNEL}"
+    VIRUSTOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-virustotal"
+    PASSIVETOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-passivetotal"
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "lambda:InvokeFunction"
+      Resource:
+        - Fn::Join:
+            - ":"
+            - - "arn:aws:lambda"
+              - Ref: "AWS::Region"
+              - Ref: "AWS::AccountId"
+              - "function:${self:service}-${self:provider.stage}-*"
 
 functions:
-  query:
-    handler: query.handler
+  slashmessage:
+    handler: lambda_handler.handle_slash_message
+    environment:
+      PASSIVETOTAL_USERNAME: "${env:PASSIVETOTAL_USERNAME}"
+      PASSIVETOTAL_APIKEY: "${env:PASSIVETOTAL_APIKEY}"
     events:
       - http:
-          path: query
+          path: slashmessage
           method: any
           request:
             passThrough: WHEN_NO_MATCH
-  vt:
-    handler: vt.handler
-    events:
-      - http:
-          integration: LAMBDA
-          path: vt
-          method: any
-          request:
-            passThrough: WHEN_NO_MATCH
+  passivetotal:
+    handler: lambda_handler.handle_passivetotal
+    environment:
+      PASSIVETOTAL_USERNAME: "${env:PASSIVETOTAL_USERNAME}"
+      PASSIVETOTAL_APIKEY: "${env:PASSIVETOTAL_APIKEY}"
+  virustotal:
+    handler: lambda_handler.handle_virustotal
+    environment:
+      VIRUSTOTAL_API_KEY: "${env:VIRUSTOTAL_API_KEY}"
 
 plugins:
   - serverless-python-requirements
 custom:
-  stage: ${opt:stage, self:provider.stage}
-  secrets: ${file(secrets.yml):${self:custom.stage}}
   pythonRequirements:
     dockerizePip: non-linux
-
-package:
-  exclude:
-    - secrets.yml
