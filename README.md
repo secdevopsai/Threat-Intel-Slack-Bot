@@ -14,13 +14,11 @@ https://www.youtube.com/watch?v=g40LLgYK1uM
 
 Threat Intel Slack Bot is completely serverless, and is built and deployed using Serverless.js.
 
-There are three `Lambdas` controlling the process:
+There are three [Lambdas](https://aws.amazon.com/lambda/) controlling the process:
 
-`slashmessage`: Function to serve as API Gateway and facilitate execution of cloud functions to query Threat Intelligence databases
-
-`passivetotal`: Triggers indicator query (Domain Names only) to Passive Total and return response to Slack Channel
-
-`virustotal`: Triggers indicator query to VirusTotal and return response to Slack Channel
+- `slashmessage`: Function to serve as API Gateway and facilitate execution of cloud functions to query Threat Intelligence databases
+- `passivetotal`: Triggers indicator query (Domain Names only) to Passive Total and return response to Slack Channel
+- `virustotal`: Triggers indicator query to VirusTotal and return response to Slack Channel
 
 ## One Command Deploy
 
@@ -60,6 +58,6 @@ export PASSIVETOTAL_APIKEY=<PASSIVE TOTAL API KEY>
 8. Create Slack Workspace
    - https://slack.com/create
 9.  Create Slack App
-   - https://api.slack.com/apps
+    - https://api.slack.com/apps
 10. Deploy
     - `serverless deploy`
