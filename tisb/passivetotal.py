@@ -22,7 +22,7 @@ def passivetotal_get(indicator):
     return pdns_results
 
 
-def handler(indicator, channel):
+def handler(*, indicator, channel):
     client = slack.WebClient(token=SLACK_API_TOKEN)
     pdns_results = passivetotal_get(indicator)
 

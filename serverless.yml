@@ -5,11 +5,10 @@ provider:
   runtime: python3.7
   region: us-west-1
   stage: dev
+  timeout: 60
   environment:
     SLACK_API_TOKEN: "${env:SLACK_API_TOKEN}"
     SLACK_CHANNEL: "${env:SLACK_CHANNEL}"
-    VIRUSTOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-virustotal"
-    PASSIVETOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-passivetotal"
   iamRoleStatements:
     - Effect: "Allow"
       Action:
@@ -26,19 +25,21 @@ functions:
   slashmessage:
     handler: lambda_handler.handle_slash_message
     environment:
-      PASSIVETOTAL_USERNAME: "${env:PASSIVETOTAL_USERNAME}"
-      PASSIVETOTAL_APIKEY: "${env:PASSIVETOTAL_APIKEY}"
+      VIRUSTOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-virustotal"
+      PASSIVETOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-passivetotal"
     events:
       - http:
           path: slashmessage
           method: any
           request:
             passThrough: WHEN_NO_MATCH
+
   passivetotal:
     handler: lambda_handler.handle_passivetotal
     environment:
       PASSIVETOTAL_USERNAME: "${env:PASSIVETOTAL_USERNAME}"
       PASSIVETOTAL_APIKEY: "${env:PASSIVETOTAL_APIKEY}"
+
   virustotal:
     handler: lambda_handler.handle_virustotal
     environment:

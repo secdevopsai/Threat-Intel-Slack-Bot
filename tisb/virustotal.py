@@ -33,7 +33,7 @@ def vt_ip_get(ip):
     return vt_results
 
 
-def handler(indicator, channel):
+def handler(*, indicator, channel):
     client = slack.WebClient(token=os.environ["SLACK_API_TOKEN"])
     # check if value is an IP
     ip_check = re.compile(
