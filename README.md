@@ -29,8 +29,11 @@ There are three [Lambdas](https://aws.amazon.com/lambda/) controlling the proces
 When deploying Threat Intel Slack Bot, `serverless.yml` defines the environment variables that will be passed to lambda functions.
 
 `SLACK_API_TOKEN`
+
 `VIRUSTOTAL_API_KEY`
+
 `PASSIVETOTAL_USERNAME`
+
 `PASSIVETOTAL_APIKEY`
 
 ```

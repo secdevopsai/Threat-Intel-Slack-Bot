@@ -20,3 +20,8 @@ def handle_passivetotal(event, context):
 def handle_virustotal(event, context):
     from tisb.virustotal import handler as virustotal_handler
     return virustotal_handler(**event)
+
+
+if __name__ == "__main__":
+    handle_passivetotal({"indicator": "secdevops.ai",
+                         "channel": "DJVCY7CP9"}, None)

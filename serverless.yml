@@ -24,6 +24,7 @@ provider:
 functions:
   slashmessage:
     handler: lambda_handler.handle_slash_message
+    reservedConcurrency: 5
     environment:
       VIRUSTOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-virustotal"
       PASSIVETOTAL_LAMBDA_FUNCTION: "${self:service}-${self:provider.stage}-passivetotal"
@@ -36,12 +37,14 @@ functions:
 
   passivetotal:
     handler: lambda_handler.handle_passivetotal
+    reservedConcurrency: 5
     environment:
       PASSIVETOTAL_USERNAME: "${env:PASSIVETOTAL_USERNAME}"
       PASSIVETOTAL_APIKEY: "${env:PASSIVETOTAL_APIKEY}"
 
   virustotal:
     handler: lambda_handler.handle_virustotal
+    reservedConcurrency: 5
     environment:
       VIRUSTOTAL_API_KEY: "${env:VIRUSTOTAL_API_KEY}"
 
